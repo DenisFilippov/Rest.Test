@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Rest.Test.Domain;
 using Rest.Test.Domain.Dto;
+using Rest.Test.Domain.Interfaces;
 
 namespace Rest.Test.Host.Controllers
 {
@@ -12,52 +11,110 @@ namespace Rest.Test.Host.Controllers
   [ApiController]
   public class PeopleController : ControllerBase
   {
-    public PeopleController()
-    {
+    private readonly IPersonService _personService;
 
+    public PeopleController(IPersonService personService)
+    {
+      _personService = personService ?? throw new ArgumentNullException(nameof(personService));
     }
 
-    [HttpGet()]
+    [HttpGet]
     public async Task<IActionResult> GetPeopleAsync()
     {
-      return Ok("Not implemented (GetPeopleAsync).");
+      try
+      {
+        var result = await _personService.GetPeopleAsync();
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
 
-    [HttpPost()]
-    public async Task<IActionResult> CreatePersonAsync([FromBody] Person person)
+    [HttpPost]
+    public async Task<IActionResult> CreatePersonAsync([FromBody] PersonDto person)
     {
-      return Ok($"Not implemented (CreatePersonAsync = {person.Id}, {person.FistsName}, " +
-                $"{person.MiddleName}, {person.LastName}, {person.Age}, {person.Sex}).");
+      try
+      {
+        await _personService.CreatePersonAsync(person);
+        return Ok(new ResponseDto {Code = 200});
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() {Code = 500, Error = new ErrorDto {Message = ex.Message}});
+      }
     }
 
     [HttpGet("new")]
     public async Task<IActionResult> CreatePersonFormAsync()
     {
-      return Ok("Not implemented (CreatePersonFormAsync).");
+      try
+      {
+        var result = await _personService.CreatePersonFormAsync();
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
 
     [HttpGet("{id}/edit")]
     public async Task<IActionResult> EditPersonFormAsync(long id)
     {
-      return Ok($"Not implemented (EditPersonFormAsync = {id}).");
+      try
+      {
+        var result = await _personService.EditPersonFormAsync(id);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPersonAsync(long id)
     {
-      return Ok($"Not implemented (GetPersonAsync = {id}).");
+      try
+      {
+        var result = await _personService.GetPersonAsync(id);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdatePersonAsync(long id)
+    public async Task<IActionResult> UpdatePersonAsync(long id, [FromBody] PersonDto person)
     {
-      return Ok($"Not implemented (UpdatePersonAsync = {id}).");
+      try
+      {
+        var result = await _personService.UpdatePersonAsync(id, person.FirstName, person.MiddleName, person.LastName,
+          person.Age, person.Sex);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePersonAsync(long id)
     {
-      return Ok($"Not implemented (DeletePersonAsync = {id}).");
+      try
+      {
+        await _personService.DeletePersonAsync(id);
+        return Ok(new ResponseDto { Code = 200 });
+      }
+      catch (Exception ex)
+      {
+        return Ok(new ResponseDto() { Code = 500, Error = new ErrorDto { Message = ex.Message } });
+      }
     }
   }
 }

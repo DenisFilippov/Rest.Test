@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rest.Test.Dal\Rest.Test.Dal.csproj" />
     <ProjectReference Include="..\Rest.Test.Domain\Rest.Test.Domain.csproj" />
+    <ProjectReference Include="..\Rest.Test.Services\Rest.Test.Services.csproj" />
   </ItemGroup>
 </Project>

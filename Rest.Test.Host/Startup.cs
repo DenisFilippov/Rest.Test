@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +20,12 @@ namespace Rest.Test.Host
       services
         .AddMvcCore(opt => opt.EnableEndpointRouting = false)
         .AddXmlSerializerFormatters();
+
+      services
+        .AddRestDto()
+        .AddRestRepositories()
+        .AddRestServices()
+        ;
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

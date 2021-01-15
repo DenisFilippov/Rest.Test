@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.Xml.Serialization;
 
 namespace Rest.Test.Domain.Dto
 {
-  [XmlRoot(nameof(Person))]
-  public class Person
+  [XmlRoot("Person")]
+  public class PersonDto
   {
     [XmlElement("Id")]
     [JsonPropertyName("id")]
@@ -15,7 +12,7 @@ namespace Rest.Test.Domain.Dto
 
     [XmlElement("FirstName")]
     [JsonPropertyName("firstName")]
-    public string FistsName { get; set; }
+    public string FirstName { get; set; }
 
     [XmlElement("LastName")]
     [JsonPropertyName("lastName")]
